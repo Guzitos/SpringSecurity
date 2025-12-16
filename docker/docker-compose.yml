@@ -1,17 +1,49 @@
+# Define os serviços que serão executados pelo Docker Compose
 services:
+
+  # Serviço do banco de dados MySQL
   mysql:
+
+    # Imagem oficial do MySQL versão 8
     image: mysql:8
+
+    # Nome fixo do container
     container_name: mysql_docker
+
+    # Variáveis de ambiente usadas pelo MySQL na inicialização
     environment:
+
+      # Senha do usuário root do MySQL
       MYSQL_ROOT_PASSWORD: 123
+
+      # Nome do banco de dados que será criado automaticamente
       MYSQL_DATABASE: mydb
+
+      # Usuário padrão que será criado
       MYSQL_USER: admin
+
+      # Senha do usuário padrão
       MYSQL_PASSWORD: 123
+
+    # Mapeamento de portas
     ports:
+      # Porta 3307 da máquina host → porta 3306 do container
+      # Permite acessar o MySQL localmente via localhost:3307
       - "3307:3306"
+
+    # Volumes usados pelo container
     volumes:
+
+      # Volume nomeado para persistir os dados do MySQL
+      # Evita perder os dados ao remover o container
       - mysql_data:/var/lib/mysql
+
+      # Script SQL que será executado automaticamente na inicialização
+      # O sufixo :ro indica que o arquivo é somente leitura
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
+# Definição dos volumes nomeados
 volumes:
+
+  # Volume usado para armazenar os dados do MySQL
   mysql_data:
